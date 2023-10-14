@@ -65,7 +65,7 @@ public class UserServiceImpl implements UserService {
     public User register(User user) {
         user.setRoles(Collections.singletonList(roleRepository.findByName(DEFAULT_USER_ROLE_NAME)));
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setStatus(Status.ENABLE);
+        user.setStatus(Status.ACTIVE);
         User userDb = userRepository.save(user);
         log.info("{} registered!", userDb.getId());
         return userDb;

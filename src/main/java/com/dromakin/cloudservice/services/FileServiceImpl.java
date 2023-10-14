@@ -28,6 +28,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -53,7 +54,13 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public List<File> getFiles() {
-        return fileRepository.findFilesByUserLoginAndStatus(getUser().getLogin(), Status.ENABLE);
+        List<File> files = fileRepository.findFilesByUserLoginAndStatus(getUser().getLogin(), Status.ACTIVE);
+
+        if (files == null) {
+            return new ArrayList<>();
+        }
+
+        return files;
     }
 
     @Override
@@ -75,7 +82,7 @@ public class FileServiceImpl implements FileService {
                 location,
                 new Date(),
                 new Date(),
-                Status.ENABLE,
+                Status.ACTIVE,
                 getUser()
         );
 

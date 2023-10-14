@@ -22,7 +22,7 @@ public final class JWTUserAdapter {
                 user.getLastName(),
                 user.getPassword(),
                 user.getEmail(),
-                user.getStatus().equals(Status.ENABLE),
+                user.getStatus().equals(Status.ACTIVE),
                 user.getUpdated(),
                 user.getLastEnter(),
                 mapToGrantedAuthorities(user.getRoles())
