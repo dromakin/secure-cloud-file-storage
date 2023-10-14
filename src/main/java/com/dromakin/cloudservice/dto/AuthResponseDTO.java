@@ -25,10 +25,6 @@ import javax.validation.constraints.NotBlank;
 @Data
 @Builder
 public class AuthResponseDTO {
-//    @NotBlank
-//    @JsonProperty("login")
-//    private String login;
-
     @NotBlank
     @JsonProperty("auth-token")
     private String token;
