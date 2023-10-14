@@ -1,0 +1,56 @@
+version: '3.8'
+
+services:
+
+#  app:
+#    container_name: cloud-service
+#    build:
+#      dockerfile: Dockerfile
+#    expose:
+#      - "8088:8088"
+#    networks:
+#      - network
+#    depends_on:
+#      - db
+#    environment:
+#      - DATASOURCE_URL=jdbc:postgresql://db:5432/netology
+#    restart: unless-stopped
+
+  front:
+    build:
+      context: ./frontend
+      dockerfile: ./Dockerfile
+    ports:
+      - "8080:8080"
+    networks:
+      - network
+    restart: always
+
+  db:
+    container_name: postgres_container
+    image: postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_DB: netology
+    ports:
+      - "5432:5432"
+    networks:
+      - network
+    restart: unless-stopped
+
+  pgadmin:
+    container_name: pgadmin4_container
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:80"
+    networks:
+      - network
+    restart: unless-stopped
+
+networks:
+  network:
+    driver: bridge
