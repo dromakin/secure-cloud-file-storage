@@ -23,7 +23,7 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "users")
+@Table(name = "users", schema = "public")
 @Data
 public class User {
 
@@ -32,7 +32,6 @@ public class User {
     private Long id;
 
     @Column(name = "login", unique = true)
-    @Size(min = 3, message = "Min 5 characters")
     private String login;
 
     @Column(name = "password")

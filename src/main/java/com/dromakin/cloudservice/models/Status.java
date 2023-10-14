@@ -13,5 +13,5 @@
 package com.dromakin.cloudservice.models;
 
 public enum Status {
-    ENABLE, DEACTIVATED, DELETED
+    ACTIVE, DEACTIVATED, DELETED
 }
