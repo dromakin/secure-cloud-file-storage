@@ -31,7 +31,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping(value = "/")
+@RequestMapping(value = "/cloud/")
 @AllArgsConstructor
 public class AuthenticationController {
 

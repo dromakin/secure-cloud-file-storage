@@ -14,8 +14,8 @@ package com.dromakin.cloudservice.controllers;
 
 import com.dromakin.cloudservice.config.SwaggerConfig;
 import com.dromakin.cloudservice.dto.FileResponseDTO;
-import com.dromakin.cloudservice.dto.FilenameRequestDTO;
-import com.dromakin.cloudservice.dto.FilenameResponseDTO;
+import com.dromakin.cloudservice.dto.FilenameDTO;
+import com.dromakin.cloudservice.models.File;
 import com.dromakin.cloudservice.services.FileService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -24,7 +24,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -35,7 +34,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping(value = "/")
+@RequestMapping(value = "/cloud")
 @AllArgsConstructor
 public class FileController {
 
@@ -50,7 +49,6 @@ public class FileController {
             }
     )
     @GetMapping(value = "/file")
-    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<Resource> downloadFile(
             @RequestParam("filename") String filename
     ) throws IOException {
@@ -73,13 +71,12 @@ public class FileController {
             }
     )
     @PutMapping(value = "/file")
-    @PreAuthorize("hasRole('ADMIN')")
-    public FilenameResponseDTO editFilename(
+    public FilenameDTO editFilename(
             @RequestParam String filename,
-            @RequestBody FilenameRequestDTO fileNameDTO
+            @RequestBody FilenameDTO fileNameDTO
     ) throws FileNotFoundException {
-        String acceptedFileName = fileService.setNewFilename(filename, fileNameDTO.getNewFileName());
-        return FilenameResponseDTO.builder().name(acceptedFileName).build();
+        String acceptedFileName = fileService.setNewFilename(filename, fileNameDTO.getName());
+        return FilenameDTO.builder().name(acceptedFileName).build();
     }
 
     @Operation(
@@ -91,7 +88,6 @@ public class FileController {
             }
     )
     @PostMapping(value = "/file")
-    @PreAuthorize("hasRole('WRITER')")
     public void uploadFile(
             @RequestParam("filename") String filename,
             @RequestParam("file") MultipartFile multipartFile
@@ -108,7 +104,6 @@ public class FileController {
             }
     )
     @DeleteMapping(value = "/file")
-    @PreAuthorize("hasRole('WRITER')")
     public void delete(@RequestParam String filename) throws Exception {
         fileService.delete(filename);
     }
@@ -124,25 +119,25 @@ public class FileController {
             }
     )
     @DeleteMapping(value = "/clear")
-    @PreAuthorize("hasRole('ADMIN')")
     public void clear(@RequestParam String filename) throws Exception {
         fileService.clear(filename);
     }
 
     // list of files
     @Operation(
-            summary = "Delete file by Admin",
+            summary = "Get files",
             security = {@SecurityRequirement(name = SwaggerConfig.AUTH_SECURITY_SCHEME)},
             responses = {
-                    @ApiResponse(responseCode = "200", description = "File deleted and clear!"),
-                    @ApiResponse(responseCode = "400", description = "File not found")
+                    @ApiResponse(responseCode = "200", description = "Get List of Files"),
+                    @ApiResponse(responseCode = "400", description = "Files not found")
             }
     )
     @GetMapping(value = "/list")
-    @PreAuthorize("hasRole('USER')")
-    public List<FileResponseDTO> getListFiles() {
-        return fileService.getFiles().stream()
+    public List<FileResponseDTO> getListFiles(@RequestParam int limit) {
+        List<File> files = fileService.getFiles();
+        return files.stream()
                 .map(file -> FileResponseDTO.builder().filename(file.getName()).size(file.getSize()).build())
+                .limit(limit <= 0 ? 1 : limit)
                 .collect(Collectors.toList());
     }
 }
