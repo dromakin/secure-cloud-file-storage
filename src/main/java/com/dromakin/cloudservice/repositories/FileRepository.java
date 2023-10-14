@@ -22,7 +22,9 @@ import java.util.Optional;
 
 @Repository
 public interface FileRepository extends JpaRepository<File, Long> {
-    Optional<File> getFileByName(String name);
+    Optional<File> getFileByNameAndStatus(String name, Status status);
+
+    List<File> findFilesByStatus(Status status);
 
     List<File> findFilesByUserLoginAndStatus(String login, Status status);
 }

@@ -42,7 +42,7 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public Resource getByName(String filename) throws FileNotFoundException {
-        File file = fileRepository.getFileByName(filename).orElseThrow(FileNotFoundException::new);
+        File file = fileRepository.getFileByNameAndStatus(filename, Status.ACTIVE).orElseThrow(FileNotFoundException::new);
         return fileSystemRepository.findInFileSystem(file.getLocation());
     }
 
@@ -65,7 +65,7 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public String setNewFilename(String fileName, String newFileName) throws FileNotFoundException {
-        File file = fileRepository.getFileByName(fileName).orElseThrow(FileNotFoundException::new);
+        File file = fileRepository.getFileByNameAndStatus(fileName, Status.ACTIVE).orElseThrow(FileNotFoundException::new);
         file.setName(newFileName);
         fileRepository.save(file);
         return file.getName();
@@ -92,7 +92,7 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public void delete(String filename) throws FileNotFoundException {
-        File file = fileRepository.getFileByName(filename).orElseThrow(FileNotFoundException::new);
+        File file = fileRepository.getFileByNameAndStatus(filename, Status.ACTIVE).orElseThrow(FileNotFoundException::new);
         file.setStatus(Status.DELETED);
         file.setUpdated(new Date());
         fileRepository.save(file);
@@ -100,11 +100,11 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public void clear(String filename) throws IOException {
-        File file = fileRepository.getFileByName(filename).orElseThrow(FileNotFoundException::new);
-        if (fileSystemRepository.remove(file.getLocation())) {
-            fileRepository.delete(file);
-        } else {
-            throw new FileNotFoundException();
+        List<File> files = fileRepository.findFilesByStatus(Status.DELETED);
+        for (File file : files) {
+            if (fileSystemRepository.remove(file.getLocation())) {
+                fileRepository.delete(file);
+            }
         }
     }
 
