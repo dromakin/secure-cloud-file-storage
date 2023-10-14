@@ -36,3 +36,28 @@ docker-compose up
 ![12.png](docs%2F12.png)
 
 ![13.png](docs%2F13.png)
+
+## Postman
+
+![1.png](docs%2Fpostman%2F1.png)
+
+![2.png](docs%2Fpostman%2F2.png)
+
+![3.png](docs%2Fpostman%2F3.png)
+
+### Upload new file
+
+![4.png](docs%2Fpostman%2F4.png)
+
+### Check list of files
+
+![5.png](docs%2Fpostman%2F5.png)
+
+### Set new name of file
+
+![6.png](docs%2Fpostman%2F6.png)
+
+### Check new name in list of files 
+
+![7.png](docs%2Fpostman%2F7.png)
+
