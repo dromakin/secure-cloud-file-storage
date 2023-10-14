@@ -91,7 +91,7 @@ public class JWTAuthServer {
         try {
 
             Jws<Claims> claims = Jwts.parser().setSigningKey(tokenSecret).parseClaimsJws(token);
-            return claims.getBody().getExpiration().before(new Date());
+            return (int) claims.getBody().get("iat") < (int) claims.getBody().get("exp");
 
         } catch (IllegalArgumentException | JwtException e) {
             throw new JwtAuthenticationException("JWT token is expired or invalid!");
