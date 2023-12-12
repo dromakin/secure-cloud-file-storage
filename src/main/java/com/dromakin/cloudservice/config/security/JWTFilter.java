@@ -13,7 +13,7 @@ import java.io.IOException;
 
 public class JWTFilter extends GenericFilterBean {
 
-    private JWTAuthServer jwtAuthServer;
+    private final JWTAuthServer jwtAuthServer;
 
     public JWTFilter(JWTAuthServer jwtAuthServer) {
         this.jwtAuthServer = jwtAuthServer;
