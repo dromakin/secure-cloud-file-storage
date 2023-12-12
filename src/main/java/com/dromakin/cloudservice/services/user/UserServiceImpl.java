@@ -10,12 +10,12 @@
  * version - 2023.10.11
  * copyright - ORGANIZATION_NAME Inc. 2023
  */
-package com.dromakin.cloudservice.services;
+package com.dromakin.cloudservice.services.user;
 
 import com.dromakin.cloudservice.models.Status;
 import com.dromakin.cloudservice.models.security.User;
-import com.dromakin.cloudservice.repositories.RoleRepository;
-import com.dromakin.cloudservice.repositories.UserRepository;
+import com.dromakin.cloudservice.repositories.user.RoleRepository;
+import com.dromakin.cloudservice.repositories.user.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;

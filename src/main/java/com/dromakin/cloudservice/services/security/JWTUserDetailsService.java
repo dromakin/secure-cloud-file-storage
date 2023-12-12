@@ -2,7 +2,7 @@ package com.dromakin.cloudservice.services.security;
 
 import com.dromakin.cloudservice.models.security.JwtUser;
 import com.dromakin.cloudservice.models.security.User;
-import com.dromakin.cloudservice.services.UserService;
+import com.dromakin.cloudservice.services.user.UserService;
 import com.dromakin.cloudservice.utils.JWTUserAdapter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;

@@ -10,7 +10,7 @@
  * version - 2023.10.10
  * copyright - ORGANIZATION_NAME Inc. 2023
  */
-package com.dromakin.cloudservice.services;
+package com.dromakin.cloudservice.services.user;
 
 import com.dromakin.cloudservice.models.security.User;
 
