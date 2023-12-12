@@ -15,10 +15,10 @@ package com.dromakin.cloudservice.repositories.storage.remote;
 import com.dromakin.cloudservice.utils.UserUtils;
 import io.minio.*;
 import io.minio.errors.*;
+import io.minio.messages.Item;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -32,7 +32,6 @@ import java.security.NoSuchAlgorithmException;
 import static com.dromakin.cloudservice.services.storage.BaseStorageService.FOLDER_STATIC_FILE_NAME;
 
 @Slf4j
-@Profile("default")
 @Repository
 public class MinioRepositoryImpl implements MinioRepository {
 
@@ -131,26 +130,24 @@ public class MinioRepositoryImpl implements MinioRepository {
     }
 
     public boolean checkIfUserFolderExist(long userId) throws MinioException {
-        var path = Paths.get(getUserFolder(userId), "/" + FOLDER_STATIC_FILE_NAME).toString();
-        var files = minioClient.listObjects(ListObjectsArgs.builder().bucket(rootBucket).prefix(path).recursive(true).build());
+        /*
+        https://stackoverflow.com/questions/72611255/how-to-check-if-object-exist-in-minio-bucket-using-minio-java-sdk
 
-        boolean result = false;
+        Чтобы проверить наличие папки в bucket приходится делать запрос и обрабатывать ошибку, считая ее ответом.
+         */
+        var path = Paths.get(getUserFolder(userId), "/" + FOLDER_STATIC_FILE_NAME).toString();
 
         try {
-            for (var file : files) {
-                if (file.get().objectName().equals(path)) {
-                    result = true;
-                    break;
-                }
-            }
-        } catch (ErrorResponseException | InsufficientDataException | InternalException | InvalidKeyException
-                | InvalidResponseException | IOException | NoSuchAlgorithmException | ServerException
-                | XmlParserException e) {
+            minioClient.statObject(StatObjectArgs.builder().bucket(rootBucket).object(path).build());
+            return true;
+        } catch (ErrorResponseException e) {
+            return false;
+        } catch (InsufficientDataException | InternalException | InvalidKeyException
+                 | InvalidResponseException | IOException | NoSuchAlgorithmException | ServerException
+                 | XmlParserException e) {
             log.error(e.getMessage());
             throw new MinioException(e.getMessage());
         }
-
-        return result;
     }
 
 }
