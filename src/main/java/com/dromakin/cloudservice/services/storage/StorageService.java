@@ -24,7 +24,7 @@ public interface StorageService {
 
     Long save(MultipartFile multipartFile, String fileName, String originalName) throws StorageException;
 
-    Resource getByName(String filename) throws FileNotFoundException;
+    Resource getByName(String filename) throws FileNotFoundException, StorageException;
 
     List<File> getFiles();
 
