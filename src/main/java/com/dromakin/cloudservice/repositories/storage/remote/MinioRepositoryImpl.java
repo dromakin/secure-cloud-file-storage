@@ -18,6 +18,7 @@ import io.minio.errors.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -31,6 +32,7 @@ import java.security.NoSuchAlgorithmException;
 import static com.dromakin.cloudservice.services.storage.BaseStorageService.FOLDER_STATIC_FILE_NAME;
 
 @Slf4j
+@Profile("default")
 @Repository
 public class MinioRepositoryImpl implements MinioRepository {
 

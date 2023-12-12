@@ -18,15 +18,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import javax.servlet.ServletException;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
 
 @RestControllerAdvice
 public class ExceptionHandlerForControllersAdvice {
