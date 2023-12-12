@@ -1,5 +1,5 @@
 /*
- * File:     FileService
+ * File:     StorageService
  * Package:  com.dromakin.cloudservice.services
  * Project:  netology-cloud-service
  *
@@ -10,32 +10,29 @@
  * version - 2023.10.10
  * copyright - ORGANIZATION_NAME Inc. 2023
  */
-package com.dromakin.cloudservice.services;
+package com.dromakin.cloudservice.services.storage;
 
+import com.dromakin.cloudservice.exceptions.StorageException;
 import com.dromakin.cloudservice.models.File;
-import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
-public interface FileService {
+public interface StorageService {
+
+    Long save(MultipartFile multipartFile, String fileName, String originalName) throws StorageException;
 
     Resource getByName(String filename) throws FileNotFoundException;
-
-    FileSystemResource findById(Long id) throws FileNotFoundException;
 
     List<File> getFiles();
 
     String setNewFilename(String fileName, String newFileName) throws FileNotFoundException;
 
-    Long save(byte[] bytes, String fileName, String originalName) throws IOException, NoSuchAlgorithmException;
-
     void delete(String filename) throws FileNotFoundException;
 
-    void clear(String filename) throws IOException;
+    void clear(String filename) throws StorageException;
 
 
 }
