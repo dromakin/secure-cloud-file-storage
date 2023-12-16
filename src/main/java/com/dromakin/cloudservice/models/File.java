@@ -33,19 +33,19 @@ public class File {
     private Long id;
 
     @Column(name = "original_filename")
-    String originalName;
+    private String originalName;
 
     @Column(name = "name", unique = true)
-    String name;
+    private String name;
 
     @Column(name = "size")
-    Long size;
+    private Long size;
 
     @Column(name = "human_size")
-    String humanSize;
+    private String humanSize;
 
     @Column(name = "location")
-    String location;
+    private String location;
 
     @CreatedDate
     @Column(name = "created")
@@ -61,7 +61,7 @@ public class File {
 
     @JsonIgnore
     @OneToOne
-    User user;
+    private User user;
 
     public File(String originalName, String name, Long size, String humanSize, String location, Date created, Date updated, Status status, User user) {
         this.originalName = originalName;
