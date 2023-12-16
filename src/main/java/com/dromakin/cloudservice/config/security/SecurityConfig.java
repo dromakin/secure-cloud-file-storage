@@ -1,6 +1,5 @@
-package com.dromakin.cloudservice.config;
+package com.dromakin.cloudservice.config.security;
 
-import com.dromakin.cloudservice.config.security.JWTAuthServer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;

@@ -4,7 +4,7 @@ import com.dromakin.cloudservice.config.security.JWTAuthServer;
 import com.dromakin.cloudservice.dto.AuthRequestDTO;
 import com.dromakin.cloudservice.dto.AuthResponseDTO;
 import com.dromakin.cloudservice.models.security.User;
-import com.dromakin.cloudservice.services.UserService;
+import com.dromakin.cloudservice.services.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;

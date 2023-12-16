@@ -10,7 +10,7 @@
  * version - 2023.10.10
  * copyright - ORGANIZATION_NAME Inc. 2023
  */
-package com.dromakin.cloudservice.repositories;
+package com.dromakin.cloudservice.repositories.storage.local;
 
 import com.dromakin.cloudservice.models.File;
 import com.dromakin.cloudservice.models.Status;

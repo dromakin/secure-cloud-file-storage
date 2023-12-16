@@ -10,8 +10,9 @@
  * version - 2023.10.11
  * copyright - ORGANIZATION_NAME Inc. 2023
  */
-package com.dromakin.cloudservice.repositories;
+package com.dromakin.cloudservice.repositories.storage.local;
 
+import com.dromakin.cloudservice.exceptions.StorageException;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
@@ -46,9 +47,14 @@ public class FileSystemRepositoryImpl implements FileSystemRepository {
     }
 
     @Override
-    public boolean remove(String location) throws IOException {
+    public boolean remove(String location) throws StorageException {
         Path file = Paths.get(location);
-        return Files.deleteIfExists(file);
+        try {
+            return Files.deleteIfExists(file);
+        } catch (IOException e) {
+            throw new StorageException(e.getMessage());
+        }
+
     }
 
 }

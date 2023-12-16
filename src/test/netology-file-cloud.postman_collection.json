@@ -84,7 +84,7 @@
 					}
 				],
 				"url": {
-					"raw": "{{server_url}}/cloud/clear?filename=newname",
+					"raw": "{{server_url}}/cloud/clear?filename=newname.pdf",
 					"host": [
 						"{{server_url}}"
 					],
@@ -95,7 +95,7 @@
 					"query": [
 						{
 							"key": "filename",
-							"value": "newname"
+							"value": "newname.pdf"
 						}
 					]
 				}
@@ -122,12 +122,12 @@
 						{
 							"key": "file",
 							"type": "file",
-							"src": "/Users/dromakin/Desktop/ex.txt"
+							"src": "/Users/dromakin/Desktop/test.pdf"
 						}
 					]
 				},
 				"url": {
-					"raw": "{{server_url}}/cloud/file?filename=example.txt",
+					"raw": "{{server_url}}/cloud/file?filename=test.pdf",
 					"host": [
 						"{{server_url}}"
 					],
@@ -138,7 +138,7 @@
 					"query": [
 						{
 							"key": "filename",
-							"value": "example.txt"
+							"value": "test.pdf"
 						}
 					]
 				}
@@ -194,7 +194,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"name\": \"newname.txt\"\n}",
+					"raw": "{\n    \"name\": \"newname.pdf\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -202,7 +202,7 @@
 					}
 				},
 				"url": {
-					"raw": "{{server_url}}/cloud/file?filename=example.txt",
+					"raw": "{{server_url}}/cloud/file?filename=test.pdf",
 					"host": [
 						"{{server_url}}"
 					],
@@ -213,7 +213,7 @@
 					"query": [
 						{
 							"key": "filename",
-							"value": "example.txt"
+							"value": "test.pdf"
 						}
 					]
 				}
@@ -235,7 +235,7 @@
 					}
 				],
 				"url": {
-					"raw": "{{server_url}}/cloud/file?filename=example.txt",
+					"raw": "{{server_url}}/cloud/file?filename=newname.pdf",
 					"host": [
 						"{{server_url}}"
 					],
@@ -246,7 +246,7 @@
 					"query": [
 						{
 							"key": "filename",
-							"value": "example.txt"
+							"value": "newname.pdf"
 						}
 					]
 				}

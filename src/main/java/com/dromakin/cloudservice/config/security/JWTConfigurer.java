@@ -1,7 +1,5 @@
-package com.dromakin.cloudservice.config;
+package com.dromakin.cloudservice.config.security;
 
-import com.dromakin.cloudservice.config.security.JWTAuthServer;
-import com.dromakin.cloudservice.config.security.JWTFilter;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.SecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -11,14 +9,14 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 public class JWTConfigurer extends SecurityConfigurerAdapter<DefaultSecurityFilterChain, HttpSecurity> {
 
-    private JWTAuthServer jwtAuthServer;
+    private final JWTAuthServer jwtAuthServer;
 
     public JWTConfigurer(JWTAuthServer jwtAuthServer) {
         this.jwtAuthServer = jwtAuthServer;
     }
 
     @Override
-    public void configure(HttpSecurity httpSecurity) throws Exception {
+    public void configure(HttpSecurity httpSecurity) {
         JWTFilter jwtFilter = new JWTFilter(jwtAuthServer);
         httpSecurity.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
     }

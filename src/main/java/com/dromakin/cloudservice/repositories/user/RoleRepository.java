@@ -10,7 +10,7 @@
  * version - 2023.10.10
  * copyright - ORGANIZATION_NAME Inc. 2023
  */
-package com.dromakin.cloudservice.repositories;
+package com.dromakin.cloudservice.repositories.user;
 
 import com.dromakin.cloudservice.models.security.Role;
 import org.springframework.data.jpa.repository.JpaRepository;

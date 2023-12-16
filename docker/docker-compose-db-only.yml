@@ -1,0 +1,53 @@
+version: '3.8'
+name: docker-compose-db-only
+
+services:
+
+  postgres:
+    container_name: postgres_container
+    image: postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_DB: ${POSTGRES_DB:-netology}
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./../data/postgres-data:/var/lib/postgresql/data
+    networks:
+      - network
+    restart: unless-stopped
+
+  pgadmin:
+    container_name: pgadmin4_container
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL:-admin@admin.com}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD:-admin}
+    ports:
+      - "5050:80"
+    volumes:
+      - ./../data/pgadmin-data:/var/lib/pgadmin
+    networks:
+      - network
+    restart: unless-stopped
+
+  minio:
+    image: minio/minio:latest
+    container_name: minio-container
+    environment:
+      MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY:-youraccesskey}
+      MINIO_SECRET_KEY: ${MINIO_SECRET_KEY:-yoursecretkey}
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - ./../data/minio-data:/data
+    command: server --console-address ":9001" /data
+    networks:
+      - network
+    restart: unless-stopped
+
+networks:
+  network:
+    driver: bridge
