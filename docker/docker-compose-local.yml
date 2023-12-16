@@ -12,23 +12,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - ./data/postgres-data:/var/lib/postgresql/data
-    networks:
-      - network
-    restart: unless-stopped
-
-  minio:
-    image: minio/minio:latest
-    container_name: minio-container
-    environment:
-      MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY:-youraccesskey}
-      MINIO_SECRET_KEY: ${MINIO_SECRET_KEY:-yoursecretkey}
-    ports:
-      - "9000:9000"
-      - "9001:9001"
-    volumes:
-      - ./data/minio-data:/data
-    command: server --console-address ":9001" /data
+      - ./../data/postgres-data:/var/lib/postgresql/data
     networks:
       - network
     restart: unless-stopped
@@ -42,7 +26,7 @@ services:
     ports:
       - "5050:80"
     volumes:
-      - ./data/pgadmin-data:/var/lib/pgadmin
+      - ./../data/pgadmin-data:/var/lib/pgadmin
     networks:
       - network
     restart: unless-stopped
@@ -50,7 +34,7 @@ services:
   backend:
     container_name: cloud-service
     build:
-      context: ./
+      context: ./../
       dockerfile: Dockerfile
     ports:
       - "8088:8088"
@@ -58,9 +42,8 @@ services:
       - network
     depends_on:
       - postgres
-      - minio
     environment:
-      APP_PROFILE: default
+      APP_PROFILE: local
       SWAGGER_DOCS: true
       POSTGRES_HOST: postgres
       POSTGRES_PORT: 5432
@@ -72,15 +55,11 @@ services:
       LOGGING_LEVEL: INFO
       JWT_TOKEN_SECRET: jwt-netology-cloud-service
       JWT_TOKEN_EXPIRED: 3600000
-      MINIO_HOST: http://minio:9000
-      MINIO_ACCESS_KEY: youraccesskey
-      MINIO_SECRET_KEY: yoursecretkey
-      MINIO_FILES_BUCKET: netology
     restart: unless-stopped
 
   front:
     build:
-      context: ./frontend
+      context: ./../frontend
       dockerfile: ./Dockerfile
     depends_on:
       - backend

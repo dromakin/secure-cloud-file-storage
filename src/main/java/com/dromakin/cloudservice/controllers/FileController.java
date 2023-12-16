@@ -15,12 +15,14 @@ package com.dromakin.cloudservice.controllers;
 import com.dromakin.cloudservice.config.SwaggerConfig;
 import com.dromakin.cloudservice.dto.FileResponseDTO;
 import com.dromakin.cloudservice.dto.FilenameDTO;
+import com.dromakin.cloudservice.exceptions.StorageException;
 import com.dromakin.cloudservice.models.File;
-import com.dromakin.cloudservice.services.FileService;
+import com.dromakin.cloudservice.services.storage.StorageService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -29,16 +31,18 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 @RestController
+@Slf4j
 @RequestMapping(value = "/cloud")
 @AllArgsConstructor
 public class FileController {
 
-    private final FileService fileService;
+    private final StorageService storageService;
 
     @Operation(
             summary = "Download File",
@@ -51,15 +55,12 @@ public class FileController {
     @GetMapping(value = "/file")
     public ResponseEntity<Resource> downloadFile(
             @RequestParam("filename") String filename
-    ) throws IOException {
-        Resource resource = fileService.getByName(filename);
-        return ResponseEntity.ok()
-                .contentLength(resource.contentLength())
-                .header(
-                        HttpHeaders.CONTENT_DISPOSITION,
-                        "attachment; filename=" +
-                                Objects.requireNonNull(resource.getFilename()).replace(" ", "_")
-                ).body(resource);
+    ) throws IOException, StorageException {
+        Resource resource = storageService.getByName(filename);
+        var headers = new HttpHeaders();
+        var encodedFileName = URLEncoder.encode(filename, StandardCharsets.UTF_8);
+        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + encodedFileName + "\"");
+        return ResponseEntity.ok().headers(headers).body(resource);
     }
 
     @Operation(
@@ -75,7 +76,7 @@ public class FileController {
             @RequestParam String filename,
             @RequestBody FilenameDTO fileNameDTO
     ) throws FileNotFoundException {
-        String acceptedFileName = fileService.setNewFilename(filename, fileNameDTO.getName());
+        String acceptedFileName = storageService.setNewFilename(filename, fileNameDTO.getName());
         return FilenameDTO.builder().name(acceptedFileName).build();
     }
 
@@ -91,8 +92,8 @@ public class FileController {
     public void uploadFile(
             @RequestParam("filename") String filename,
             @RequestParam("file") MultipartFile multipartFile
-    ) throws Exception {
-        fileService.save(multipartFile.getBytes(), filename, multipartFile.getOriginalFilename());
+    ) throws StorageException {
+        storageService.save(multipartFile, filename, multipartFile.getOriginalFilename());
     }
 
     @Operation(
@@ -104,8 +105,8 @@ public class FileController {
             }
     )
     @DeleteMapping(value = "/file")
-    public void delete(@RequestParam String filename) throws Exception {
-        fileService.delete(filename);
+    public void delete(@RequestParam String filename) throws FileNotFoundException {
+        storageService.delete(filename);
     }
 
 
@@ -119,8 +120,8 @@ public class FileController {
             }
     )
     @DeleteMapping(value = "/clear")
-    public void clear(@RequestParam String filename) throws Exception {
-        fileService.clear(filename);
+    public void clear(@RequestParam String filename) throws StorageException {
+        storageService.clear(filename);
     }
 
     // list of files
@@ -134,7 +135,7 @@ public class FileController {
     )
     @GetMapping(value = "/list")
     public List<FileResponseDTO> getListFiles(@RequestParam int limit) {
-        List<File> files = fileService.getFiles();
+        List<File> files = storageService.getFiles();
         return files.stream()
                 .map(file -> FileResponseDTO.builder().filename(file.getName()).size(file.getSize()).build())
                 .limit(limit <= 0 ? 1 : limit)

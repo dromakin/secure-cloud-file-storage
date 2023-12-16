@@ -1,0 +1,36 @@
+version: '3.3'
+
+services:
+
+  postgres:
+    image: postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_DB: ${POSTGRES_DB:-netology}
+    ports:
+      - "5432:5432"
+#    volumes:
+#      - ./../../../data/postgres-data:/var/lib/postgresql/data
+    networks:
+      - network
+    restart: unless-stopped
+
+  minio:
+    image: minio/minio:latest
+    environment:
+      MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY:-youraccesskey}
+      MINIO_SECRET_KEY: ${MINIO_SECRET_KEY:-yoursecretkey}
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+#    volumes:
+#      - ./../../../data/minio-data:/data
+    command: server --console-address ":9001" /data
+    networks:
+      - network
+    restart: unless-stopped
+
+networks:
+  network:
+    driver: bridge
