@@ -1,0 +1,289 @@
+{
+	"info": {
+		"_postman_id": "573f74de-ea99-4d04-ae2f-f4e3d377447f",
+		"name": "netology-file-cloud",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "9165319"
+	},
+	"item": [
+		{
+			"name": "/oauth/token",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"login\": \"admin@localhost\",\n    \"password\": \"admin\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{server_url}}/cloud/login",
+					"host": [
+						"{{server_url}}"
+					],
+					"path": [
+						"cloud",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/cloud/list",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "auth-token",
+						"value": "{{token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{server_url}}/cloud/list?limit=3",
+					"host": [
+						"{{server_url}}"
+					],
+					"path": [
+						"cloud",
+						"list"
+					],
+					"query": [
+						{
+							"key": "limit",
+							"value": "3"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/cloud/clear",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "auth-token",
+						"value": "{{token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{server_url}}/cloud/clear?filename=newname.pdf",
+					"host": [
+						"{{server_url}}"
+					],
+					"path": [
+						"cloud",
+						"clear"
+					],
+					"query": [
+						{
+							"key": "filename",
+							"value": "newname.pdf"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/cloud/file upload",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "auth-token",
+						"value": "{{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": "/Users/dromakin/Desktop/test.pdf"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{server_url}}/cloud/file?filename=test.pdf",
+					"host": [
+						"{{server_url}}"
+					],
+					"path": [
+						"cloud",
+						"file"
+					],
+					"query": [
+						{
+							"key": "filename",
+							"value": "test.pdf"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/cloud/file delete",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "auth-token",
+						"value": "{{token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{server_url}}/cloud/file?filename=example.txt",
+					"host": [
+						"{{server_url}}"
+					],
+					"path": [
+						"cloud",
+						"file"
+					],
+					"query": [
+						{
+							"key": "filename",
+							"value": "example.txt"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/cloud/file update name",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "auth-token",
+						"value": "{{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"newname.pdf\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{server_url}}/cloud/file?filename=test.pdf",
+					"host": [
+						"{{server_url}}"
+					],
+					"path": [
+						"cloud",
+						"file"
+					],
+					"query": [
+						{
+							"key": "filename",
+							"value": "test.pdf"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/cloud/file download",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "auth-token",
+						"value": "{{token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{server_url}}/cloud/file?filename=newname.pdf",
+					"host": [
+						"{{server_url}}"
+					],
+					"path": [
+						"cloud",
+						"file"
+					],
+					"query": [
+						{
+							"key": "filename",
+							"value": "newname.pdf"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "server_url",
+			"value": "server_url",
+			"type": "string"
+		},
+		{
+			"key": "token",
+			"value": "token",
+			"type": "string"
+		}
+	]
+}

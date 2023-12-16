@@ -1,0 +1,71 @@
+version: '3.8'
+name: docker-compose-test
+
+services:
+
+  postgres:
+    container_name: postgres_container
+    image: postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_DB: ${POSTGRES_DB:-netology}
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./../data/postgres-data:/var/lib/postgresql/data
+    networks:
+      - network
+    restart: unless-stopped
+
+  minio:
+    image: minio/minio:latest
+    container_name: minio-container
+    environment:
+      MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY:-youraccesskey}
+      MINIO_SECRET_KEY: ${MINIO_SECRET_KEY:-yoursecretkey}
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - ./../data/minio-data:/data
+    command: server --console-address ":9001" /data
+    networks:
+      - network
+    restart: unless-stopped
+
+  backend:
+    container_name: cloud-service
+    build:
+      context: ../../..
+      dockerfile: ../../../Dockerfile
+    ports:
+      - "8088:8088"
+    networks:
+      - network
+    depends_on:
+      - postgres
+      - minio
+    environment:
+      APP_PROFILE: default
+      SWAGGER_DOCS: true
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_DB: netology
+      POSTGRES_USERNAME: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_SCHEMA: public
+      FLYWAY_PATH: db/migration/postgresql
+      LOGGING_LEVEL: INFO
+      JWT_TOKEN_SECRET: jwt-netology-cloud-service
+      JWT_TOKEN_EXPIRED: 3600000
+      MINIO_HOST: http://minio:9000
+      MINIO_ACCESS_KEY: youraccesskey
+      MINIO_SECRET_KEY: yoursecretkey
+      MINIO_FILES_BUCKET: netology
+    restart: unless-stopped
+
+
+networks:
+  network:
+    driver: bridge
