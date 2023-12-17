@@ -35,6 +35,19 @@ spring.profiles.active=local
       APP_PROFILE: local
 ```
 
+## Схемы в БД Postgres
+Все необходимые схемы в БД Postgres создаются с помощью Flyway миграции.
+
+### Пользователи
+С помощью Flyway создается 3 пользователя:
+
+Login/Password:
+```text
+admin@localhost/admin
+test@localhost/admin
+writer@localhost/admin
+```
+
 ### Визуализация работы
 
 Работа backend с "local", "default" профилями выглядит одинаково.
