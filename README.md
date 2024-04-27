@@ -1,112 +1,160 @@
-# Дипломная работа «Облачное хранилище»
+# Визуализация работы
 
-## Описание проекта
+## Архитектура
+![FileCloudService.drawio.png](docs%2FFileCloudService.drawio.png)
 
-Задача — разработать REST-сервис. Сервис должен предоставить REST-интерфейс для загрузки файлов и вывода списка уже загруженных файлов пользователя.
+Основные компоненты:
+- frontend (Vue.js)
+- backend
+  - Spring boot 2.x
+- DB
+  - PostgreSQL
+  - MinIO (default profile)
+- Admin panels
+  - Swagger (rest api docs)
+  - MinIO admin panel
+  - Pgadmin
 
-Все запросы к сервису должны быть авторизованы. Заранее подготовленное веб-приложение (FRONT) должно подключаться к разработанному сервису без доработок,
-а также использовать функционал FRONT для авторизации, загрузки и вывода списка файлов пользователя.
+Вариант для редактирования: [FileCloudService.drawio](docs%2FFileCloudService.drawio)
 
-## Требования к приложению
-
-- Сервис должен предоставлять REST-интерфейс для интеграции с FRONT.
-- Сервис должен реализовывать все методы, описанные в [yaml-файле](docs/CloudServiceSpecification.yaml):
-    1. Вывод списка файлов.
-    2. Добавление файла.
-    3. Удаление файла.
-    4. Авторизация.
-- Все настройки должны вычитываться из файла настроек (yml).
-- Информация о пользователях сервиса (логины для авторизации) и данные должны храниться в базе данных (на выбор студента).
-
-## Требования к реализации
-
-- Приложение разработано с использованием Spring Boot.
-- Использован сборщик пакетов gradle/maven.
-- Для запуска используется docker, docker-compose.
-- Код размещён на Github.
-- Код покрыт unit-тестами с использованием mockito.
-- Добавлены интеграционные тесты с использованием testcontainers.
-
-## Шаги реализации
-
-- Изучите протокол получения и отправки сообщений между FRONT и BACKEND.
-- Нарисуйте схему приложений.
-- Опишите архитектуру приложения, где хранятся настройки и большие файлы, структуры таблиц/коллекций базы данных.
-- Создайте репозиторий проекта на Github.
-- Напишите приложение с использованием Spring Boot.
-- Протестируйте приложение с помощью curl/postman.
-- Протестируйте приложение с FRONT.
-- Напишите README.md к проекту.
-- Отправьте на проверку.
-
-## Описание и запуск FRONT
-
-1. Установите nodejs (версия не ниже 19.7.0) на компьютер, следуя [инструкции](https://nodejs.org/ru/download/current/).
-2. Скачайте [FRONT](./netology-diplom-frontend) (JavaScript).
-3. Перейдите в папку FRONT приложения и все команды для запуска выполняйте из неё.
-4. Следуя описанию README.md FRONT проекта, запустите nodejs-приложение (`npm install`, `npm run serve`).
-5. Далее нужно задать url для вызова своего backend-сервиса.
-    1. В файле `.env` FRONT (находится в корне проекта) приложения нужно изменить url до backend, например: `VUE_APP_BASE_URL=http://localhost:8080`.
-        1. Нужно указать корневой url вашего backend, к нему frontend будет добавлять все пути согласно спецификации
-        2. Для `VUE_APP_BASE_URL=http://localhost:8080` при выполнении логина frontend вызовет `http://localhost:8080/login`
-    2. Запустите FRONT снова: `npm run serve`.
-    3. Изменённый `url` сохранится для следующих запусков.
-6. По умолчанию FRONT запускается на порту 8080 и доступен по url в браузере `http://localhost:8080`.
-    1. Если порт 8080 занят, FRONT займёт следующий доступный (`8081`). После выполнения `npm run serve` в терминале вы увидите, на каком порту он запустился.
-
-## Авторизация приложения
-
-FRONT-приложение использует header `auth-token`, в котором отправляет токен (ключ-строка) для идентификации пользователя на BACKEND.
-Для получения токена нужно пройти авторизацию на BACKEND и отправить на метод /login логин и пароль. В случае успешной проверки в ответ BACKEND должен вернуть json-объект
-с полем `auth-token` и значением токена. Все дальейшие запросы с FRONTEND, кроме метода /login, отправляются с этим header.
-Для выхода из приложения нужно вызвать метод BACKEND /logout, который удалит/деактивирует токен. Последующие запросы с этим токеном будут не авторизованы и вернут код 401.
-
-Обратите внимание, что название самого параметра (как и всех параметров в спецификации), его регистр имеют значение.
-Важно, чтобы ваш backend возвращал токен в поле `auth-token` – если поле будет называться `authToken` или `authtoken`, фронт не сможет найти токен и дальше логина процесс не пройдёт.
-
-## Настройка CORS
-
-Чтобы FRONT смог обратиться к вашему серверу, необходимо настроить CORS в вашем приложении. Например, можно сделать это, добавив конфигурацию:
-```java
-import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-
-@Configuration
-@EnableWebMvc
-class WebConfig implements WebMvcConfigurer {
-
-    @Override
-    public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**")
-            .allowCredentials(true)
-            .allowedOrigins("http://localhost:8081")
-            .allowedMethods("*");
-    }
-}
+## Запуск
+```shell
+docker-compose up
 ```
-где адрес в параметре `allowedOrigins` – это адрес фронта.
 
-## Дополнительные рекомендации
+По умолчанию поднимается все с профилем default (с min.io хранилищем файлов), если нужно поднять в рамках локальной системы, то следует поменять это в properties, либо использовать глобальную переменную.
 
-Это итоговый проект, где вы будете использовать все полученные вами знания не только в написании кода, но и в поиске информации, в траблшутинге и т.д.
-Используйте все доступные вам инструменты, чтобы решить возникающие проблемы:
-1) Используйте консоль разработчика в браузере, вкладка Network. Она позволит вам увидеть, какой запрос отправляет фронт, какие параметры и url он использует, какой ответ он получает.
-2) Используйте дебаг в IDEA, чтобы увидеть весь процесс обработки запроса вашим приложением.
-3) Используйте интернет для поиска стандартных подходов, гайдов, распространённых ошибок. Все проблемы уже были решены до нас.
-____________
+1 вариант через [application.properties](src%2Fmain%2Fresources%2Fapplication.properties)
+```properties
+spring.profiles.active=local
+```
 
+2 вариант через APP_PROFILE в [docker-compose.yml](docker-compose.yml)
+```yaml
+    environment:
+      APP_PROFILE: local
+```
 
-### Если возникли вопросы
+## Схемы в БД Postgres
+Все необходимые схемы в БД Postgres создаются с помощью Flyway миграции.
 
-- Попробуйте найти ответ в лекциях, материалах и домашних заданиях курса. После этого воспользуйтесь Google. В случае любой сложности вы можете задать вопрос дипломному руководителю. Но лучше сначала попытаться решить проблему самостоятельно.
-- В одном вопросе лучше описывать одну проблему. Так ответ дипломного руководителя будет максимально эффективным и полезным.
-- По возможности прикрепляйте к вопросу скриншоты и стрелочкой показывайте, где не получается. Программу для этого можно скачать [здесь](https://app.prntscr.com/ru/).
-- По возможности задавайте вопросы в комментариях к коду.
-- Начинайте работу над дипломом как можно раньше, чтобы было больше времени на правки.
-- Делайте диплом по частям, а не всё сразу. Так вы сможете оперативно внести правки, и не придётся переделывать большую часть работы. 
+### Пользователи
+С помощью Flyway создается 3 пользователя:
 
-____________
-Описание готового диплома: [README_INFO_RU.md](README_INFO_RU.md)
+Login/Password:
+```text
+admin@localhost/admin
+test@localhost/admin
+writer@localhost/admin
+```
 
+### Визуализация работы
+
+Работа backend с "local", "default" профилями выглядит одинаково.
+
+Единственное отличие - это сервис min.io
+
+#### min.io admin site
+##### До загрузки файла
+
+![0.png](docs%2Fimg%2F0.png)
+
+![01.png](docs%2Fimg%2F01.png)
+
+##### После загрузки файла
+![02.png](docs%2Fimg%2F02.png)
+
+![03.png](docs%2Fimg%2F03.png)
+
+#### docker-compose
+
+Этот профиль можно явно не указывать, он по умолчанию активирован.
+
+```yaml
+    environment:
+      APP_PROFILE: default
+```
+![1_1.png](docs%2Fimg%2F1_1.png)
+
+```yaml
+    environment:
+      APP_PROFILE: local
+```
+![1.png](docs%2Fimg%2F1.png)
+
+![2.png](docs%2Fimg%2F2.png)
+
+#### Start Spring Boot App
+
+![3.png](docs%2Fimg%2F3.png)
+
+![4.png](docs%2Fimg%2F4.png)
+
+#### Swagger
+
+![5.png](docs%2Fimg%2F5.png)
+
+![6.png](docs%2Fimg%2F6.png)
+
+![7.png](docs%2Fimg%2F7.png)
+
+![8.png](docs%2Fimg%2F8.png)
+
+#### Frontend
+
+![9.png](docs%2Fimg%2F9.png)
+
+![10.png](docs%2Fimg%2F10.png)
+
+![11.png](docs%2Fimg%2F11.png)
+
+![12.png](docs%2Fimg%2F12.png)
+
+![13.png](docs%2Fimg%2F13.png)
+
+## Тестирование
+
+Для тестов я использовал отдельный docker-compose файл: [docker-compose-db-only.yml](src%2Ftest%2Fresources%2Fdocker-compose-db-only.yml)
+
+Использовал testcontainers и MockMvc.
+
+Также были создан отдельный файл postman для проведения unit тестирования.
+
+### Testing Controllers
+
+![14.png](docs%2Fimg%2F14.png)
+
+![15.png](docs%2Fimg%2F15.png)
+
+### Postman
+
+#### get new token
+
+![001.png](docs%2Fimg%2F001.png)
+
+### Upload new file
+
+![002.png](docs%2Fimg%2F002.png)
+
+### Check list of files
+
+![003.png](docs%2Fimg%2F003.png)
+
+### Set new name of file
+
+![004.png](docs%2Fimg%2F004.png)
+
+### Delete file (mark status DELETED)
+
+![006.png](docs%2Fimg%2F006.png)
+
+### Delete file from user-folder
+
+![007.png](docs%2Fimg%2F007.png)
+
+### Check min.io
+
+![008.png](docs%2Fimg%2F008.png)
+
+### Download file
+![009.png](docs%2Fimg%2F009.png)
