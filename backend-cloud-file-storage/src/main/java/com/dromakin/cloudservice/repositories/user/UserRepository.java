@@ -12,6 +12,7 @@
  */
 package com.dromakin.cloudservice.repositories.user;
 
+import com.dromakin.cloudservice.dao.security.Role;
 import com.dromakin.cloudservice.dao.security.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -20,6 +21,9 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -32,4 +36,22 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Modifying
     @Query("update User u set u.lastEnter = :lastEnter WHERE u.id = :userId")
     void setLastEnter(@Param("userId") Long userId, @Param("lastEnter") Long lastEnter);
+
+    @Transactional
+    @Modifying
+    @Query("update User u set u.email = :email, u.firstName = :firstName, u.lastName = :lastName, u.updated = :updated where u.login = :login")
+    void updateUserDetails(
+            @Param("login") String login,
+            @Param("email") String email, @Param("firstName") String firstName, @Param("lastName") String lastName,
+            @Param("updated") Date updated
+    );
+
+    @Transactional
+    @Modifying
+    @Query("update User u set u.password = :password, u.updated = :updated where u.login = :login")
+    void resetPasswordUser(
+            @Param("login") String login,
+            @Param("password") String password,
+            @Param("updated") Date updated
+    );
 }
