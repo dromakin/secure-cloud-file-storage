@@ -1,7 +1,7 @@
 import axios from "axios";
 import cookies from 'browser-cookies';
 
-const AUTH_TOKEN_KEY = 'auth-token';
+const AUTH_TOKEN_KEY = process.env.AUTH_TOKEN_KEY; // 'auth-token';
 
 const httpClient = axios.create({
     baseURL: process.env.VUE_APP_BASE_URL,

@@ -170,15 +170,34 @@ public class UserController {
 
     // password
     @Operation(
-            summary = "Update password for user by login",
+            summary = "Change password for user by login",
             security = {@SecurityRequirement(name = SwaggerConfig.AUTH_SECURITY_SCHEME)},
             responses = {
                     @ApiResponse(responseCode = "200", description = "Password updated!"),
                     @ApiResponse(responseCode = "400", description = "Password can't be updated!")
             }
     )
-    @PatchMapping(value = "/user/password")
-    public void updatePassword(@RequestBody UpdatePasswordUserDTO updatePasswordUserDTO) throws UserServiceException {
+    @PostMapping(value = "/password")
+    public void changePassword(@RequestBody ChangePasswordUserDTO changePasswordUserDTO) throws UserServiceException {
+        if (!userService.isUserLoginExist(changePasswordUserDTO.getLogin())) {
+            String errMsg = "User login not found! Create before update!";
+            log.error(errMsg);
+            throw new UserServiceException(errMsg);
+        }
+
+        userService.changePassword(changePasswordUserDTO.getLogin(), changePasswordUserDTO.getNewPassword());
+    }
+
+    @Operation(
+            summary = "Reset password for user by login",
+            security = {@SecurityRequirement(name = SwaggerConfig.AUTH_SECURITY_SCHEME)},
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Password updated!"),
+                    @ApiResponse(responseCode = "400", description = "Password can't be updated!")
+            }
+    )
+    @PostMapping(value = "/user/password")
+    public void resetPassword(@RequestBody UpdatePasswordUserDTO updatePasswordUserDTO) throws UserServiceException {
         if (!userService.isUserLoginExist(updatePasswordUserDTO.getLogin())) {
             String errMsg = "User login not found! Create before update!";
             log.error(errMsg);

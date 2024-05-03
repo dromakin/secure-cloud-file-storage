@@ -39,6 +39,8 @@ public interface UserService {
     // password
     void updatePassword(String login, String oldPassword, String newPassword) throws UserServiceException;
 
+    void changePassword(String login, String newPassword) throws UserServiceException;
+
     // roles
     List<Role> getRoles();
 

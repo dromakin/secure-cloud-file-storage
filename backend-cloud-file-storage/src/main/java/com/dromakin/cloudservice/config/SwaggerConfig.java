@@ -35,6 +35,7 @@ public class SwaggerConfig {
                 .bearerFormat("JWT")
                 .scheme("bearer");
     }
+
     @Bean
     public OpenAPI openAPI() {
         return new OpenAPI().addSecurityItem(new SecurityRequirement().
@@ -62,5 +63,10 @@ public class SwaggerConfig {
     @Bean
     public GroupedOpenApi actuatorApi() {
         return GroupedOpenApi.builder().group("actuator").pathsToMatch("/actuator/**").build();
+    }
+
+    @Bean
+    public GroupedOpenApi adminApi() {
+        return GroupedOpenApi.builder().group("admin").pathsToMatch("/api/v1/").build();
     }
 }

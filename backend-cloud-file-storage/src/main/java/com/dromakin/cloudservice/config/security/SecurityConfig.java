@@ -67,9 +67,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()
                 .antMatchers("/actuator/**", "/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs", "/v3/api-docs/**", "/cloud/login", "/cloud/logout").permitAll()
-                .antMatchers("/cloud/list", "/cloud/file", "/api/v1/users/me").hasAnyRole("ADMIN", "USER", "WRITER")
+                .antMatchers("/cloud/list", "/cloud/file", "/api/v1/users/me", "/api/v1/user/password").hasAnyRole("ADMIN", "USER", "WRITER")
                 .antMatchers("/api/v1/user/roles").hasAnyRole("ADMIN", "ROLES_MANAGER")
-                .antMatchers("/api/v1/user/password").hasAnyRole("ADMIN", "PASSWORD_MANAGER")
+                .antMatchers("/api/v1/password").hasAnyRole("ADMIN", "PASSWORD_MANAGER")
                 .antMatchers("/cloud/clear", "/api/v1/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
                 .and().httpBasic().disable()

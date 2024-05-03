@@ -60,28 +60,29 @@ services:
       - postgres
       - minio
     environment:
-      APP_PROFILE: default
+      APP_PROFILE: ${APP_PROFILE:-default}
       SWAGGER_DOCS: true
-      POSTGRES_HOST: postgres
-      POSTGRES_PORT: 5432
-      POSTGRES_DB: netology
-      POSTGRES_USERNAME: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_SCHEMA: public
-      FLYWAY_PATH: db/migration/postgresql
-      LOGGING_LEVEL: INFO
-      JWT_TOKEN_SECRET: jwt-netology-cloud-service
-      JWT_TOKEN_EXPIRED: 3600000
+      POSTGRES_HOST: ${POSTGRES_HOST:-postgres}
+      POSTGRES_PORT: ${POSTGRES_PORT:-5432}
+      POSTGRES_DB: ${POSTGRES_DB:-netology}
+      POSTGRES_USERNAME: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_SCHEMA: ${POSTGRES_SCHEMA:-public}
+      FLYWAY_PATH: ${FLYWAY_PATH:-db/migration/postgresql}
+      LOGGING_LEVEL: ${LOGGING_LEVEL:-INFO}
+      JWT_TOKEN_SECRET: ${JWT_TOKEN_SECRET:-jwt-netology-cloud-service}
+      JWT_TOKEN_EXPIRED: ${JWT_TOKEN_EXPIRED:-3600000}
       MINIO_HOST: http://minio:9000
-      MINIO_ACCESS_KEY: youraccesskey
-      MINIO_SECRET_KEY: yoursecretkey
-      MINIO_FILES_BUCKET: netology
+      MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY:-youraccesskey}
+      MINIO_SECRET_KEY: ${MINIO_SECRET_KEY:-yoursecretkey}
+      MINIO_FILES_BUCKET: ${POSTGRES_DB:-netology}
+      MAX_FILE_SIZE: ${MAX_FILE_SIZE:-100MB}
     restart: unless-stopped
 
   front:
     build:
-      context: ./frontend
-      dockerfile: backend-cloud-file-storage/Dockerfile
+      context: ./frontend-client
+      dockerfile: Dockerfile
     depends_on:
       - backend
     ports:

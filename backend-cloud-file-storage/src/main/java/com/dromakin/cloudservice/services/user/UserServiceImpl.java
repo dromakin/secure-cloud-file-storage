@@ -110,6 +110,11 @@ public class UserServiceImpl implements UserService {
     }
 
     // password
+    @Override
+    public void changePassword(String login, String newPassword) {
+        Date date = new Date();
+        userRepository.resetPasswordUser(login, passwordEncoder.encode(newPassword), date);
+    }
 
     @Override
     public void updatePassword(String login, String oldPassword, String newPassword) throws UserServiceException {
