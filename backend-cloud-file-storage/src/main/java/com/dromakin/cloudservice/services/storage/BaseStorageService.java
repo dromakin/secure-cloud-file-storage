@@ -15,7 +15,7 @@ package com.dromakin.cloudservice.services.storage;
 import com.dromakin.cloudservice.dao.File;
 import com.dromakin.cloudservice.dao.Status;
 import com.dromakin.cloudservice.dao.security.User;
-import com.dromakin.cloudservice.repositories.storage.local.FileRepository;
+import com.dromakin.cloudservice.repositories.storage.FileRepository;
 import com.dromakin.cloudservice.repositories.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;

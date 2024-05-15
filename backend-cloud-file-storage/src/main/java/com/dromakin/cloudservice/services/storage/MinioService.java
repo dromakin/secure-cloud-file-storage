@@ -16,7 +16,7 @@ import com.dromakin.cloudservice.exceptions.StorageException;
 import com.dromakin.cloudservice.dao.File;
 import com.dromakin.cloudservice.dao.Status;
 import com.dromakin.cloudservice.dao.security.User;
-import com.dromakin.cloudservice.repositories.storage.local.FileRepository;
+import com.dromakin.cloudservice.repositories.storage.FileRepository;
 import com.dromakin.cloudservice.repositories.storage.remote.MinioRepository;
 import com.dromakin.cloudservice.repositories.storage.remote.MinioRepositoryImpl;
 import com.dromakin.cloudservice.repositories.user.UserRepository;

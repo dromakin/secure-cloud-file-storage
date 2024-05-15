@@ -1,4 +1,5 @@
 version: '3.8'
+name: docker-compose-db-only
 
 services:
 
@@ -31,38 +32,26 @@ services:
       - network
     restart: unless-stopped
 
-  backend:
-    container_name: cloud-service
-    build:
-      context: ./../
-      dockerfile: ../backend-cloud-file-storage/Dockerfile
+  minio:
+    image: minio/minio:latest
+    container_name: minio-container
+    environment:
+      MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY:-youraccesskey}
+      MINIO_SECRET_KEY: ${MINIO_SECRET_KEY:-yoursecretkey}
     ports:
-      - "8088:8088"
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - ./../data/minio-data:/data
+    command: server --console-address ":9001" /data
     networks:
       - network
-    depends_on:
-      - postgres
-    environment:
-      APP_PROFILE: local
-      SWAGGER_DOCS: true
-      POSTGRES_HOST: postgres
-      POSTGRES_PORT: 5432
-      POSTGRES_DB: netology
-      POSTGRES_USERNAME: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_SCHEMA: public
-      FLYWAY_PATH: db/migration/postgresql
-      LOGGING_LEVEL: INFO
-      JWT_TOKEN_SECRET: jwt-netology-cloud-service
-      JWT_TOKEN_EXPIRED: 3600000
     restart: unless-stopped
 
   front:
     build:
       context: ./../frontend-client
-      dockerfile: ./Dockerfile
-    depends_on:
-      - backend
+      dockerfile: Dockerfile
     ports:
       - "8080:8080"
     networks:

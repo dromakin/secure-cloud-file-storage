@@ -18,7 +18,7 @@
 								"auth": {
 									"type": "noauth"
 								},
-								"method": "PATCH",
+								"method": "POST",
 								"header": [
 									{
 										"key": "{{token_header}}",
@@ -44,6 +44,43 @@
 										"api",
 										"v1",
 										"user",
+										"password"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/api/v1/password",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "{{token_header}}",
+										"value": "{{token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"login\": \"example2@localhost\",\n    \"new_password\": \"example-new\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{server_url}}/api/v1/password",
+									"host": [
+										"{{server_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
 										"password"
 									]
 								}

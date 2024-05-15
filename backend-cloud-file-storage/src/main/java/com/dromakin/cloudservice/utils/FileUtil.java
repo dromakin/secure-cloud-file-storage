@@ -21,6 +21,6 @@ public class FileUtil {
     }
 
     public static Long getSizeByBytes(byte[] bytes) {
-        return (long) (bytes.length / 1024.0);
+        return (long) bytes.length;
     }
 }

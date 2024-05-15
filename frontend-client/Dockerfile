@@ -1,6 +1,5 @@
-FROM node:14-buster
-
-# устанавливаем простой HTTP-сервер для статики
+FROM node:14.21
+WORKDIR /app
 RUN npm install -g http-server
 
 # делаем каталог 'app' текущим рабочим каталогом
