@@ -28,6 +28,6 @@ import javax.validation.constraints.NotBlank;
 @Builder
 public class FilenameDTO {
     @NotBlank
-    @JsonProperty("name")
+    @JsonProperty("filename")
     private String name;
 }
