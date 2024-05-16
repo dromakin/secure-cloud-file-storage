@@ -51,7 +51,7 @@ export default createStore({
                 })
         },
         logout({dispatch}: any) {
-            return new Promise<void>((res) => {
+            return new Promise((res) => {
                 logout()
                     .then(() => {
                         dispatch('setAuthToken', '');

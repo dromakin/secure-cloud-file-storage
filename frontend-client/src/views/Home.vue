@@ -136,7 +136,7 @@
     import {uploadFile, updateFile, deleteFile, downloadFile} from "@/api/api";
 
     export default defineComponent({
-        name: 'FilesHome',
+        name: 'Home',
         components: {
             EButton,
             EUpload,

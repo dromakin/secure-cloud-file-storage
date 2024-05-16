@@ -25,7 +25,7 @@
     import {useRouter} from "vue-router";
 
     export default defineComponent({
-        name: 'LoginNavbar',
+        name: 'Navbar',
         components: {
             EButton,
         },
